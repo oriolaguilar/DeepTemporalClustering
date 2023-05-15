@@ -5,7 +5,7 @@ Time Series Clustering layer
 @author Florent Forest (FlorentF9)
 """
 
-from keras.engine.topology import Layer, InputSpec
+from tensorflow.keras.layers import Layer, InputSpec
 import keras.backend as K
 
 
