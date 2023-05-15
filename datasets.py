@@ -25,10 +25,23 @@ def load_ucr(dataset='CBF'):
     assert(y.min() == 0)  # assert labels are integers and start from 0
     # preprocess data (standardization)
     X_scaled = TimeSeriesScalerMeanVariance().fit_transform(X)
-    return X_scaled, y
+    return X_scaled, None#y
 
+
+def load_data_personal():
+  print("---------------- EI -------------------")
+  original_shape = (764, 18, 10)
+  print(original_shape)
+  loaded_arr = np.loadtxt("/content/sample_data/data_usa.txt")
+  loaded_arr = loaded_arr.reshape(
+    loaded_arr.shape[0], loaded_arr.shape[1] // original_shape[2], original_shape[2])
+  
+  X_scaled = TimeSeriesScalerMeanVariance().fit_transform(loaded_arr)
+  return X_scaled, None
 
 def load_data(dataset_name):
+    if dataset_name == "own":
+        return load_data_personal()
     if dataset_name in all_ucr_datasets:
         return load_ucr(dataset_name)
     else:
