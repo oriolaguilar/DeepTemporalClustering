@@ -28,8 +28,8 @@ def load_ucr(dataset='CBF'):
     return X_scaled, None#y
 
 
-def load_data_personal():
-  print("---------------- EI -------------------")
+def load_data_USA():
+  print("---------------- USA -------------------")
   original_shape = (764, 18, 10)
   print(original_shape)
   loaded_arr = np.loadtxt("/content/sample_data/data_usa.txt")
@@ -39,9 +39,22 @@ def load_data_personal():
   X_scaled = TimeSeriesScalerMeanVariance().fit_transform(loaded_arr)
   return X_scaled, None
 
+def load_data_CHINA():
+  print("---------------- CHINA -------------------")
+  original_shape = (479, 100, 8)
+  print(original_shape)
+  loaded_arr = np.loadtxt("/content/sample_data/data_china.txt")
+  loaded_arr = loaded_arr.reshape(
+    loaded_arr.shape[0], loaded_arr.shape[1] // original_shape[2], original_shape[2])
+  
+  X_scaled = TimeSeriesScalerMeanVariance().fit_transform(loaded_arr)
+  return X_scaled, None
+
 def load_data(dataset_name):
-    if dataset_name == "own":
-        return load_data_personal()
+    if dataset_name == "USA":
+        return load_data_USA()
+    if dataset_name == "CHINA":
+        return load_data_CHINA()
     if dataset_name in all_ucr_datasets:
         return load_ucr(dataset_name)
     else:
