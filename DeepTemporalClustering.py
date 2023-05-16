@@ -16,6 +16,7 @@ from keras.models import Model
 from keras.layers import Dense, Reshape, UpSampling2D, Conv2DTranspose, GlobalAveragePooling1D, Softmax
 from keras.losses import kullback_leibler_divergence
 import keras.backend as K
+import keras
 
 # scikit-learn
 from sklearn.cluster import AgglomerativeClustering, KMeans
@@ -377,6 +378,7 @@ class DTC:
                 logdict = dict(epoch=epoch)
 
                 y_pred = q.argmax(axis=1)
+                
                 if X_val is not None:
                     q_val = self.model.predict(X_val)[1]
                     p_val = DTC.target_distribution(q_val)
@@ -446,6 +448,7 @@ class DTC:
         logfile.close()
         print('Saving model to:', save_dir + '/DTC_model_final.h5')
         self.model.save_weights(save_dir + '/DTC_model_final.h5')
+        self.model.save(save_dir + '/DTC_real_model_final.h5')
 
 
 if __name__ == "__main__":
@@ -509,7 +512,8 @@ if __name__ == "__main__":
               heatmap=args.heatmap)
 
     # Initialize model
-    optimizer = 'adam'
+    #optimizer = 'adam'
+    optimizer = keras.optimizers.Adam(lr=0.025)
     dtc.initialize()
     dtc.model.summary()
     dtc.compile(gamma=args.gamma, optimizer=optimizer, initial_heatmap_loss_weight=args.initial_heatmap_loss_weight,
